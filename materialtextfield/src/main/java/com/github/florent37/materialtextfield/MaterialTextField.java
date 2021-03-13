@@ -3,10 +3,12 @@ package com.github.florent37.materialtextfield;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.ViewPropertyAnimatorListener;
 import androidx.core.view.ViewPropertyAnimatorUpdateListener;
+
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,51 +76,52 @@ public class MaterialTextField extends FrameLayout {
             final int heightInitial = getContext().getResources().getDimensionPixelOffset(R.dimen.mtf_cardHeight_final);
 
             ViewCompat.animate(label)
-                .alpha(1)
-                .scaleX(1)
-                .scaleY(1)
-                .translationY(0)
-                .setDuration(ANIMATION_DURATION);
+                    .alpha(1)
+                    .scaleX(1)
+                    .scaleY(1)
+                    .translationY(0)
+                    .setDuration(ANIMATION_DURATION);
 
             ViewCompat.animate(image)
-                .alpha(0)
-                .scaleX(0.4f)
-                .scaleY(0.4f)
-                .setDuration(ANIMATION_DURATION);
+                    .alpha(0)
+                    .scaleX(0.4f)
+                    .scaleY(0.4f)
+                    .setDuration(ANIMATION_DURATION);
 
             ViewCompat.animate(editText)
-                .alpha(1f)
-                .setUpdateListener(new ViewPropertyAnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(View view) {
-                        float value = ViewCompat.getAlpha(view); //percentage
-                        card.getLayoutParams().height = (int) (value * (heightInitial - cardCollapsedHeight) + cardCollapsedHeight);
-                        card.requestLayout();
-                    }
-                })
-                .setDuration(ANIMATION_DURATION)
-                .setListener(new ViewPropertyAnimatorListener() {
-                    @Override
-                    public void onAnimationStart(View view) {
-                        if (expanded) {
-                            editText.setVisibility(View.VISIBLE);
+                    .alpha(1f)
+                    .setUpdateListener(new ViewPropertyAnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(View view) {
+                            float value = view.getAlpha(); //percentage
+                            card.getLayoutParams().height = (int) (value * (heightInitial - cardCollapsedHeight) + cardCollapsedHeight);
+                            card.requestLayout();
                         }
-                    }
-
-                    @Override
-                    public void onAnimationEnd(View view) {
-                        if (!expanded) {
-                            editText.setVisibility(View.INVISIBLE);
+                    })
+                    .setDuration(ANIMATION_DURATION)
+                    .setListener(new ViewPropertyAnimatorListener() {
+                        @Override
+                        public void onAnimationStart(View view) {
+                            if (expanded) {
+                                editText.setVisibility(View.VISIBLE);
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onAnimationCancel(View view) { }
-                });
+                        @Override
+                        public void onAnimationEnd(View view) {
+                            if (!expanded) {
+                                editText.setVisibility(View.INVISIBLE);
+                            }
+                        }
+
+                        @Override
+                        public void onAnimationCancel(View view) {
+                        }
+                    });
 
             ViewCompat.animate(card)
-                .scaleY(reducedScale)
-                .setDuration(ANIMATION_DURATION);
+                    .scaleY(reducedScale)
+                    .setDuration(ANIMATION_DURATION);
 
             if (editText.hasFocus()) {
                 inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
@@ -132,25 +135,25 @@ public class MaterialTextField extends FrameLayout {
     public void expand() {
         if (!expanded) {
             ViewCompat.animate(editText)
-                .alpha(1f)
-                .setDuration(ANIMATION_DURATION);
+                    .alpha(1f)
+                    .setDuration(ANIMATION_DURATION);
 
             ViewCompat.animate(card)
-                .scaleY(1f)
-                .setDuration(ANIMATION_DURATION);
+                    .scaleY(1f)
+                    .setDuration(ANIMATION_DURATION);
 
             ViewCompat.animate(label)
-                .alpha(0.4f)
-                .scaleX(0.7f)
-                .scaleY(0.7f)
-                .translationY(-labelTopMargin)
-                .setDuration(ANIMATION_DURATION);
+                    .alpha(0.4f)
+                    .scaleX(0.7f)
+                    .scaleY(0.7f)
+                    .translationY(-labelTopMargin)
+                    .setDuration(ANIMATION_DURATION);
 
             ViewCompat.animate(image)
-                .alpha(1f)
-                .scaleX(1f)
-                .scaleY(1f)
-                .setDuration(ANIMATION_DURATION);
+                    .alpha(1f)
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .setDuration(ANIMATION_DURATION);
 
             if (editText != null) {
                 editText.requestFocus();
@@ -166,34 +169,6 @@ public class MaterialTextField extends FrameLayout {
 
     public void setBackgroundColor(int color) {
         this.backgroundColor = color;
-    }
-
-    public int getBackgroundColor() {
-        return this.backgroundColor;
-    }
-
-    public View getCard() {
-        return card;
-    }
-
-    public TextView getLabel() {
-        return label;
-    }
-
-    public ImageView getImage() {
-        return image;
-    }
-
-    public EditText getEditText() {
-        return editText;
-    }
-
-    public ViewGroup getEditTextLayout() {
-        return editTextLayout;
-    }
-
-    public boolean isExpanded() {
-        return expanded;
     }
 
     public void setHasFocus(boolean hasFocus) {
@@ -267,8 +242,8 @@ public class MaterialTextField extends FrameLayout {
         editTextLayout.addView(editText);
 
         label = (TextView) findViewById(R.id.mtf_label);
-        ViewCompat.setPivotX(label, 0);
-        ViewCompat.setPivotY(label, 0);
+        label.setPivotX(0);
+        label.setPivotY(0);
 
         if (editText.getHint() != null) {
             label.setText(editText.getHint());
@@ -285,13 +260,13 @@ public class MaterialTextField extends FrameLayout {
         final int reducedHeight = cardCollapsedHeight;
 
         reducedScale = (float) (reducedHeight * 1.0 / expandedHeight);
-        ViewCompat.setScaleY(card, reducedScale);
-        ViewCompat.setPivotY(card, expandedHeight);
+        card.setScaleY(reducedScale);
+        card.setPivotY(expandedHeight);
 
         image = (ImageView) findViewById(R.id.mtf_image);
-        ViewCompat.setAlpha(image, 0);
-        ViewCompat.setScaleX(image, 0.4f);
-        ViewCompat.setScaleY(image, 0.4f);
+        image.setImageAlpha(0);
+        image.setScaleX(0.4f);
+        image.setScaleY(0.4f);
 
         ViewCompat.setAlpha(editText, 0f);
         editText.setBackgroundColor(Color.TRANSPARENT);
